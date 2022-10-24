@@ -1,0 +1,48 @@
+#listes des articles publiés le weekend dernier dans la Libre et Le soir
+er = EventRegistry(apiKey = YOUR_API_KEY)
+qStr = """
+{
+    "$query": {
+        "$and": [
+            {
+                "locationUri": "http://en.wikipedia.org/wiki/Belgium"
+            },
+            {
+                "$or": [
+                    {
+                        "sourceUri": "lalibre.be"
+                    },
+                    {
+                        "sourceUri": "lesoir.be"
+                    }
+                ]
+            },
+            {
+                "$or": [
+                    {
+                        "lang": "eng"
+                    },
+                    {
+                        "lang": "fra"
+                    }
+                ]
+            },
+            {
+                "dateStart": "2022-10-17",
+                "dateEnd": "2022-10-24"
+            }
+        ]
+    },
+    "$filter": {
+        "dataType": [
+            "news"
+        ],
+        "startSourceRankPercentile": 0,
+        "endSourceRankPercentile": 50
+    }
+}
+"""
+q = QueryArticlesIter.initWithComplexQuery(qStr)
+# change maxItems to get the number of results that you want
+for article in q.execQuery(er, maxItems=100):
+    print(article)
